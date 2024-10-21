@@ -1,9 +1,9 @@
 from setuptools import find_packages, setup
 
 setup(
-    name="google-scholar-pub-tracker",
+    name="pub-collector",
     version="1.0",
-    description="Track FABRIC citations from Google scholar",
+    description="Collect FABRIC related publications from Google scholar",
     author="FABRIC team",
     url="https://github.com/fabric-testbed",
     packages=find_packages(),
