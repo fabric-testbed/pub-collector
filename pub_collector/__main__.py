@@ -1,4 +1,4 @@
-from pub_collector import users
+from pub_collector import users, publications
 
 
 def main() -> None:
@@ -22,6 +22,14 @@ def main() -> None:
     # List authors publications after 2020
     print(users.get_all_publication_titles(author_details), 2020)
 
+    # Get Publication object by title
+    fabric_pub = publications.search_publications(
+        "Fabric: A national-scale programmable experimental network infrastructure"
+    )
+    # Get a list of publications that cited FABRIC paper
+    print(publications.get_cited_by(fabric_pub))
+
 
 if __name__ == "__main__":
-    main()
+    # main()
+    main_pub()
