@@ -26,7 +26,8 @@ def get_author_by_google_scholar_id(google_scholar_id):
     try:
         result = scholarly.search_author_id(google_scholar_id)
         google_scholar_candidates.append(result)
-        return google_scholar_candidates
+        if len(google_scholar_candidates) > 0:
+            return google_scholar_candidates[0]
     except:
         print(f"Could not query google with id")
 
@@ -49,8 +50,12 @@ def get_author_by_name_email(name, email):
 
 
 def get_all_details_for_author(author):
-    # Retrieve all the details for the author
-    return scholarly.fill(author)
+    if author:
+        try:
+            # Retrieve all the details for the author
+            return scholarly.fill(author)
+        except:
+            return None
 
 
 def get_all_publications(author_details):
