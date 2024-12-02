@@ -10,6 +10,7 @@ def search_publications(pub_title):
 
 
 def get_cited_by(publication):
+    publication_filled = scholarly.fill(publication)
     pg = ProxyGenerator()
 
     if not pg.FreeProxies():
@@ -17,5 +18,7 @@ def get_cited_by(publication):
         sys.exit()
     scholarly.use_proxy(pg)
 
-    if publication["citedby_url"]:
-        return scholarly.citedby(publication)
+    citations = [
+        citation["bib"]["title"] for citation in scholarly.citedby(publication_filled)
+    ]
+    return citations
