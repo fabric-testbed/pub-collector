@@ -8,6 +8,6 @@ setup(
     url="https://github.com/fabric-testbed",
     packages=find_packages(),
     python_requires=">=3.6",
-    install_requirements=["scholarly"],
+    install_requires=["scholarly"],
     platforms=["any"],
 )
