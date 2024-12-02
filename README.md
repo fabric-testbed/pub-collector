@@ -6,20 +6,9 @@ pub-collector is a Python lib that is used to collect FABRIC related publication
 
 ### Installation
 
-For Python CLI tools, simply include this lib in the `setup.py` file, `install_requirements` section:
-
-```python
-install_requirements=[
-    "some",
-    "other",
-    "deps",
-    "pub-collector",
-]
+Run this command to install pub-collector:
 ```
-
-Alternatively, use pip to install the dependency `scholarly` from pypi:
-```
-pip3 install scholarly
+pip3 install .
 ```
 
 ### Usage
