@@ -14,12 +14,12 @@ def get_first_author(author_name):
 
 
 def get_author_by_google_scholar_id(google_scholar_id):
-    pg = ProxyGenerator()
+    # pg = ProxyGenerator()
 
-    if not pg.FreeProxies():
-        print("FreeProxies fail")
-        sys.exit()
-    scholarly.use_proxy(pg)
+    # if not pg.FreeProxies():
+    #     print("FreeProxies fail")
+    #     sys.exit()
+    # scholarly.use_proxy(pg)
 
     google_scholar_candidates = []
 
@@ -111,55 +111,3 @@ def get_all_publication_titles(author_details, since_year=0):
         if "pub_year" in pub["bib"] and int(pub["bib"]["pub_year"]) >= since_year
     ]
 
-
-def quick_list_author_publications(google_scholar_id, since_year=2020):
-    """
-    Fetch basic publication information for a given Google Scholar ID
-    without filling publication details.
-
-    Parameters:
-    - google_scholar_id: The Google Scholar ID
-    - since_year: Optional parameter to filter publications after this year (default: 2020)
-    """
-    try:
-        # Search for the author by ID
-        author = scholarly.search_author_id(google_scholar_id)
-
-        # Extract basic author info
-        name = author.get("name", "")
-
-        # Get publications with basic info only (no fill)
-        publications = []
-        for pub in scholarly.search_author_pubs(author):
-            # Get publication year
-            pub_year = pub.get("bib", {}).get("pub_year", "")
-
-            # Skip if publication year is earlier than since_year
-            if pub_year and int(pub_year) < since_year:
-                continue
-
-            # Extract the basic info we want
-            pub_info = {
-                "title": pub.get("bib", {}).get("title", ""),
-                "pub_year": pub_year,
-                "citation": f"{pub.get('bib', {}).get('title', '')}, {pub_year}",
-            }
-            publications.append(pub_info)
-
-            # Limit to first 10 publications to avoid unnecessary data
-            if len(publications) >= 10:
-                break
-
-        return {
-            "name": name,
-            "google_scholar_id": google_scholar_id,
-            "publications": publications,
-        }
-
-    except Exception as e:
-        print(f"Error fetching data for ID {google_scholar_id}: {str(e)}")
-        return {
-            "name": "Not found",
-            "google_scholar_id": google_scholar_id,
-            "publications": [],
-        }

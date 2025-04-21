@@ -38,35 +38,34 @@ def main() -> None:
 
     result = {}
     for item in input_data:
+        fabric_id = item["uid"]
+        google_scholar_id = item["google_scholar_id"]
         # Get author by Google Scholar ID
-        # author = users.get_author_by_google_scholar_id(item["google_scholar_id"])
-        # if not author:
-        #     print(
-        #         f"Author not found for Google Scholar ID: {item['google_scholar_id']}"
-        #     )
-        #     continue
-
-        # author_details = users.get_all_details_for_author(author)
-        # if not author_details:
-        #     print(f"Could not retrieve details for author: {author}")
-        #     continue
-        # Get all publications for the author
-        # publications = users.quick_list_author_publications(author_details, since_year=2020)
-        publications = publications.quick_list_author_publications(
-            item["google_scholar_id"], since_year=2020
-        )
-        if not publications:
-            print(f"No publications found for Google scholar ID: {item["google_scholar_id"]}")
+        author = users.get_author_by_google_scholar_id(google_scholar_id)
+        if not author:
+            print(
+                f"Author not found for Google Scholar ID: {item['google_scholar_id']}"
+            )
             continue
 
-        print(publications)
+        author_details = users.get_all_details_for_author(author)
+        if not author_details:
+            print(f"Could not retrieve details for author: {author}")
+            continue
+        # Get all publications for the author
+        publications = users.get_all_publications(author_details, since_year=2020)
+        
+        if not publications:
+            print(f"No publications found for Google scholar ID: {google_scholar_id}")
+            continue
 
-        result[item["uid"]] = {
-            "google_scholar_id": item["google_scholar_id"],
+        result[fabric_id] = {
+            "google_scholar_id": google_scholar_id,
             "publications": publications,
         }
 
         # Output the result
+        print("Final results:")
         print(json.dumps(result, indent=4))
 
         # Optionally save to file
