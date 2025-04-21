@@ -28,16 +28,19 @@ def main() -> None:
     input_data = [
         {
             "uid": "dfafeb1c-1902-4726-a032-f91483f99b09",
+            "name": "User 1",
             "google_scholar_id": "KiMZogkAAAAJ",
         },
         {
             "uid": "bebbc63c-3d6b-4b08-b364-4f952d89337a",
+            "name": "User 2",
             "google_scholar_id": "aZgSEiAAAAAJ",
         },
     ]
 
     result = {}
     for item in input_data:
+        name = item["name"]
         fabric_id = item["uid"]
         google_scholar_id = item["google_scholar_id"]
         # Get author by Google Scholar ID
@@ -60,6 +63,7 @@ def main() -> None:
             continue
 
         result[fabric_id] = {
+            "name": name,
             "google_scholar_id": google_scholar_id,
             "publications": publications,
         }
@@ -72,6 +76,8 @@ def main() -> None:
         with open("scholar_publications.json", "w") as f:
             json.dump(result, f, indent=4)
 
+    # Get bibtex for a paper title
+    print(publications.get_bibtex("Fabric: A national-scale programmable experimental network infrastructure"))
 
 if __name__ == "__main__":
     main()
