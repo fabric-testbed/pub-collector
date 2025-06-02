@@ -2,6 +2,8 @@ from scholarly import scholarly
 from scholarly import ProxyGenerator
 import sys
 
+from thefuzz import fuzz
+
 
 def get_first_author(author_name):
     # Retrieve the author's data, fill-in, and print
@@ -11,6 +13,40 @@ def get_first_author(author_name):
     # Retrieve the first result from the iterator
     first_author_result = next(results)
     return first_author_result
+
+
+def search_google_scholar_by_affiliation(name, affiliation, threshold=80):
+    """
+    Search Google Scholar for a single author using fuzzy matching on affiliation.
+    
+    Args:
+        name (str): The author's full name.
+        affiliation (str): Expected affiliation.
+        threshold (int): Minimum fuzzy match score (0-100) for affiliation matching.
+
+    Returns:
+        str or None: First matching Google Scholar ID, or None if not found.
+    """
+    try:
+        search_query = scholarly.search_author(name)
+        
+        for author in search_query:
+            author_affiliation = author.get('affiliation', '')
+            
+            if affiliation:
+                print(f"Comparing {affiliation} with {author_affiliation}")
+                match_score = fuzz.partial_ratio(affiliation.lower(), author_affiliation.lower())
+                if match_score < threshold:
+                    continue
+            
+            scholar_id = author.get('scholar_id')
+            if scholar_id:
+                return scholar_id 
+    
+    except Exception as e:
+        print(f"Error searching for {name}: {e}")
+    
+    return None
 
 
 def get_author_by_google_scholar_id(google_scholar_id):
