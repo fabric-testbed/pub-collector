@@ -1,4 +1,5 @@
 from pub_collector import users, publications
+import json
 
 
 def main() -> None:
@@ -23,13 +24,60 @@ def main() -> None:
         # List authors publications after 2020
         print(users.get_all_publication_titles(author_details), 2020)
 
-    # Get Publication object by title
-    fabric_pub = publications.search_publications(
-        "Fabric: A national-scale programmable experimental network infrastructure"
-    )
-    # Get a list of publications that cited FABRIC paper
-    print(publications.get_cited_by(fabric_pub))
+    # Example input
+    input_data = [
+        {
+            "uid": "dfafeb1c-1902-4726-a032-f91483f99b09",
+            "name": "User 1",
+            "google_scholar_id": "KiMZogkAAAAJ",
+        },
+        {
+            "uid": "bebbc63c-3d6b-4b08-b364-4f952d89337a",
+            "name": "User 2",
+            "google_scholar_id": "aZgSEiAAAAAJ",
+        },
+    ]
 
+    result = {}
+    for item in input_data:
+        name = item["name"]
+        fabric_id = item["uid"]
+        google_scholar_id = item["google_scholar_id"]
+        # Get author by Google Scholar ID
+        author = users.get_author_by_google_scholar_id(google_scholar_id)
+        if not author:
+            print(
+                f"Author not found for Google Scholar ID: {item['google_scholar_id']}"
+            )
+            continue
+
+        author_details = users.get_all_details_for_author(author)
+        if not author_details:
+            print(f"Could not retrieve details for author: {author}")
+            continue
+        # Get all publications for the author
+        publications = users.get_all_publications(author_details, since_year=2020)
+        
+        if not publications:
+            print(f"No publications found for Google scholar ID: {google_scholar_id}")
+            continue
+
+        result[fabric_id] = {
+            "name": name,
+            "google_scholar_id": google_scholar_id,
+            "publications": publications,
+        }
+
+        # Output the result
+        print("Final results:")
+        print(json.dumps(result, indent=4))
+
+        # Optionally save to file
+        with open("scholar_publications.json", "w") as f:
+            json.dump(result, f, indent=4)
+
+    # Get bibtex for a paper title
+    print(publications.get_bibtex("Fabric: A national-scale programmable experimental network infrastructure"))
 
 if __name__ == "__main__":
     main()

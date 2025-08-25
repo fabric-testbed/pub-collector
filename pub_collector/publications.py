@@ -8,6 +8,12 @@ def search_publications(pub_title):
     search_query = scholarly.search_pubs(pub_title)
     return next(search_query)
 
+def get_bibtex(pub_title):
+    # Search publication by title, return a Publication object
+    search_query = scholarly.search_pubs(pub_title)
+    pub = next(search_query)
+    return scholarly.bibtex(pub)
+
 
 def get_cited_by(publication):
     publication_filled = scholarly.fill(publication)

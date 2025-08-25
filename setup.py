@@ -8,6 +8,9 @@ setup(
     url="https://github.com/fabric-testbed",
     packages=find_packages(),
     python_requires=">=3.6",
-    install_requires=["scholarly"],
+    install_requires=[
+        "scholarly",
+        "thefuzz[speedup]"
+    ],
     platforms=["any"],
 )
